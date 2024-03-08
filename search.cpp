@@ -145,8 +145,11 @@ int main(){
     // Create a struct to store the return values
     struct search_return search_return;
 
-    // Create a vector to store the time taken by the program for different number of threads
+    // Create a vector to store the total time taken by the program for different number of threads
     vector<vector<int>> time_vector;
+
+    // Create a vector to store the time taken by the program search words for different number of threads
+    vector<vector<int>> time_search;
 
     // Process the program for different number of threads
     for (int i = 1; i <= 100; i++){
@@ -158,13 +161,22 @@ int main(){
         cout << "Love count: " << search_return.loveCount << endl;
         cout << "Hate count: " << search_return.hateCount << endl;
         cout << "Most used word: " << search_return.mostUsedWord << endl;
-        time_vector.push_back({i, search_return.searchTime});
+        time_search.push_back({i, search_return.searchTime});
+        time_vector.push_back({i, search_return.totalTime});
         cout<<endl;
     }
 
-    // Save the time vector to a csv file
+    // Save the time vectors to a csv file
+    ofstream file_search;
+    file_search.open("search_time.csv");
+    file_search << "A,B" << endl;
+    for(int i = 0; i < time_search.size(); i++){
+        file_search << time_search[i][0] << "," << time_search[i][1] << endl;
+    }
+    file_search.close();
+
     ofstream file;
-    file.open("time.csv");
+    file.open("total_time.csv");
     file << "A,B" << endl;
     for(int i = 0; i < time_vector.size(); i++){
         file << time_vector[i][0] << "," << time_vector[i][1] << endl;
