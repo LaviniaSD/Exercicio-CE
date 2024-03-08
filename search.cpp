@@ -10,7 +10,7 @@ using namespace std;
 
 
 // Function to count the number of occurrences of two words in a string ignoring punctuation
-void count_words(int threadID,vector<vector<int>> count_vector ,string text, string word1, string word2){
+void count_words(int threadID, vector<vector<int>> count_vector, string text, string word1, string word2) {
     // Remove punctuation from the text
     text = regex_replace(text, regex("[^a-zA-Z\\s]"), "");
     // Convert the text to lowercase
@@ -136,13 +136,9 @@ search_return process_threads(int iNumThreads, string filename, string word1, st
     search_return.totalTime = chrono::duration_cast<chrono::milliseconds>(end - start).count();
 
     return search_return;
-
 }
 
-
-
 int main(){
-
     // Text to be processed by each thread
     string document = "shakespeare.txt";
 
@@ -158,7 +154,10 @@ int main(){
         search_return = process_threads(i, document, "love", "hate");
         cout << "Process time: " << search_return.processTime << " ms" << endl;
         cout << "Search time: " << search_return.searchTime << " ms" << endl;
-        cout << "Total time: " << search_return.totalTime << " ms" << endl;
+        cout << "Total time: " << search_return.totalTime << endl;
+        cout << "Love count: " << search_return.loveCount << endl;
+        cout << "Hate count: " << search_return.hateCount << endl;
+        cout << "Most used word: " << search_return.mostUsedWord << endl;
         time_vector.push_back({i, search_return.searchTime});
         cout<<endl;
     }

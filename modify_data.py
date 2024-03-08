@@ -3,7 +3,7 @@ def increase_size(path):
     with open(path, 'r+b') as f:
         f.seek(0)
         content = f.read()
-        for i in range(200):
+        for i in range(50):
             f.write(content)
 
 if __name__ == '__main__':

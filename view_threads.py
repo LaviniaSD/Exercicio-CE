@@ -7,8 +7,8 @@ def view_threads(excel_file):
 
     plt.scatter(df["A"], df["B"])
 
-    plt.xlabel("Numero de Threads")
-    plt.ylabel("Tempo de Execusão")
+    plt.xlabel("Número de Threads")
+    plt.ylabel("Tempo de Execução")
     plt.title("Análise de Paralelismo com Threads")
     plt.show()
 
