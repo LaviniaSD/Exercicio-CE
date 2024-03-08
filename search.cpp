@@ -19,6 +19,7 @@ void count_words(int threadID,vector<vector<int>> count_vector ,string text, str
     int count1 = 0;
     int count2 = 0;
     string word;
+    // Create a stringstream to read the text word by word
     stringstream ss(text);
     while(ss >> word){
         if(word == word1){
@@ -50,40 +51,27 @@ vector<string> read_text(string filename, int iNumThreads){
     ifstream file;
     file.open(filename);
     string line;
-    // Calculate the number of lines in the file
-    int num_lines = 0;
-    while(getline(file, line)){
-        num_lines++;
-    }
-    // Create the blocks of text for each thread based on the number of lines in the file
+    // Set each line to a thread until all lines are used
     vector<string> parts;
-    int block_size = num_lines / iNumThreads;
-    int start = 0;
-    int end = block_size;
-    int remainder = num_lines % iNumThreads;
-
     for(int i = 0; i < iNumThreads; i++){
-        string part = "";
-        if(i == iNumThreads - 1){
-            end += remainder;
+        parts.push_back("");
+    }
+    int actual_thread = 0;
+    while(getline(file, line)){
+        if(actual_thread < iNumThreads){
+            parts[actual_thread] += line + "\n";
+            actual_thread++;
         }
-        file.clear();
-        file.seekg(0, ios::beg);
-        for(int j = 0; j < num_lines; j++){
-            getline(file, line);
-            if(j >= start && j < end){
-                part += line + "\n";
-            }
+        else{
+            actual_thread = 0;
+            parts[actual_thread] += line + "\n";
         }
-        parts.push_back(part);
-        start = end;
-        end += block_size;
     }
     file.close();
     return parts;
 }
 
-
+// Function to process multiple threads
 search_return process_threads(int iNumThreads, string filename, string word1, string word2){
 
     auto start = chrono::high_resolution_clock::now();
@@ -168,7 +156,10 @@ int main(){
     for (int i = 1; i <= 100; i++){
         cout << "Number of threads: " << i << endl;
         search_return = process_threads(i, document, "love", "hate");
-        time_vector.push_back({i, search_return.totalTime});
+        cout << "Process time: " << search_return.processTime << " ms" << endl;
+        cout << "Search time: " << search_return.searchTime << " ms" << endl;
+        cout << "Total time: " << search_return.totalTime << " ms" << endl;
+        time_vector.push_back({i, search_return.searchTime});
         cout<<endl;
     }
 
