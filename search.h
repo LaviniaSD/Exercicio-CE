@@ -16,7 +16,7 @@ struct search_return{
 };
 
 // Function to count the number of occurrences of the words
-void count_words(int threadID,vector<vector<int>> count_vector ,string text, string word1, string word2);
+vector<int> count_words(int iThread, string text, string word1, string word2);
 
 // Function to sum the number of occurrences of the words
 vector<int> somaThread(vector<vector<int>> count_vector, int iNumThreads);

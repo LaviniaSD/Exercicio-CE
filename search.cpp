@@ -10,7 +10,7 @@ using namespace std;
 
 
 // Function to count the number of occurrences of two words in a string ignoring punctuation
-void count_words(int threadID, vector<vector<int>> count_vector, string text, string word1, string word2) {
+vector<int> count_words(int threadID,string text, string word1, string word2) {
     // Remove punctuation from the text
     text = regex_replace(text, regex("[^a-zA-Z\\s]"), "");
     // Convert the text to lowercase
@@ -30,8 +30,7 @@ void count_words(int threadID, vector<vector<int>> count_vector, string text, st
         }
     }
     
-    // Update the vector with the count of words for the thread
-    count_vector[threadID-1] = {count1, count2};
+    return {count1, count2};
 }
 
 // Function to sum the counts of words from each thread
@@ -98,8 +97,10 @@ search_return process_threads(int iNumThreads, string filename, string word1, st
     auto start_search = chrono::high_resolution_clock::now();
 
     for(int i = 1; i <= iNumThreads; ++i){
-        count_vector.push_back({0, 0});
-        threads.push_back(std::thread(count_words, i, count_vector, parts[i-1], word1, word2));
+        threads.push_back(std::thread([i, &count_vector, parts, word1, word2](){
+            count_vector.push_back(count_words(i, parts[i-1], word1, word2));
+        }));
+        
     }
 
     // End measuring time
